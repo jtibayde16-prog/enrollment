@@ -20,11 +20,22 @@ import { Program } from './programs/entities/program.entity';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
+        host:
+          configService.get<string>('DB_HOST') ||
+          configService.get<string>('MYSQLHOST'),
+        port:
+          configService.get<number>('DB_PORT') ||
+          configService.get<number>('MYSQLPORT') ||
+          3306,
+        username:
+          configService.get<string>('DB_USERNAME') ||
+          configService.get<string>('MYSQLUSER'),
+        password:
+          configService.get<string>('DB_PASSWORD') ||
+          configService.get<string>('MYSQLPASSWORD'),
+        database:
+          configService.get<string>('DB_DATABASE') ||
+          configService.get<string>('MYSQLDATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true, // Set to false in production
       }),
